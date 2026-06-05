@@ -4,10 +4,24 @@ import api from "../api/axios"
 
 function CarTable({ filter }) {
   const [localCars, setLocalCars] = useState([]);
+  const [editingCar, setEditingCar] = useState(null);
+  
   useEffect(() => {
     setLocalCars(Array.isArray(filter) ? filter : []);
   }, [filter]);
-  const [editingCar, setEditingCar] = useState(null);
+  
+  
+  useEffect(() => {
+    const fetchCars = async () => {
+      try {
+        const res = await api.get(`/cars/`)
+        setLocalCars(res.data.allCars)
+      } catch(err) {
+        console.error("Failed to fetch cars:", err)
+      }
+    };
+    fetchCars();
+  }, []); 
 
   const exportCSV = () => {
     const headers = ['ID', 'Car Model', 'Brand', 'Price', 'Year', 'Status'];
