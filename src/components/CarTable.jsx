@@ -31,13 +31,16 @@ function CarTable({ filter }) {
   const handlePrint = () => window.print();
 
   const onDelete = async (id) => {
-    try {
-      await api.delete(`/cars/delete/${id}`);
-      setLocalCars(prev => prev.filter(car => car.id !== id));
-      alert('Car removed from inventory successfully!');
-    } catch (err) {
-      console.error("Failed to delete car from database:", err);
-      alert('Could not delete car. Please try again.');
+    const confirmed = confirm("Are you sure you want to delete this car?")
+    if(confirmed){
+      try {
+        await api.delete(`/cars/delete/${id}`);
+        setLocalCars(prev => prev.filter(car => car.id !== id));
+        alert('Car removed from inventory successfully!');
+      } catch (err) {
+        console.error("Failed to delete car from database:", err);
+        alert('Could not delete car. Please try again.');
+      }
     }
   };
 
